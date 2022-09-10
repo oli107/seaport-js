@@ -85,6 +85,9 @@ describeWithFixture(
             const { actions } = await seaport.fulfillOrder({
               order,
               accountAddress: fulfiller.address,
+              overrides: {
+                maxPriorityFeePerGas: ethers.utils.parseUnits("5", "gwei"),
+              },
             });
 
             expect(actions.length).to.eq(1);

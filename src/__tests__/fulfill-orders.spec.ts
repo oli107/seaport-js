@@ -73,6 +73,9 @@ describeWithFixture(
             ],
             // 2.5% fee
             fees: [{ recipient: zone.address, basisPoints: 250 }],
+            overrides: {
+              maxPriorityFeePerGas: ethers.utils.parseUnits("5", "gwei"),
+            },
           };
 
           secondStandardCreateOrderInput = {
@@ -91,6 +94,9 @@ describeWithFixture(
             ],
             // 2.5% fee
             fees: [{ recipient: zone.address, basisPoints: 250 }],
+            overrides: {
+              maxPriorityFeePerGas: ethers.utils.parseUnits("5", "gwei"),
+            },
           };
 
           thirdStandardCreateOrderInput = {
@@ -109,6 +115,9 @@ describeWithFixture(
             ],
             // 2.5% fee
             fees: [{ recipient: zone.address, basisPoints: 250 }],
+            overrides: {
+              maxPriorityFeePerGas: ethers.utils.parseUnits("5", "gwei"),
+            },
           };
         });
 
@@ -150,7 +159,8 @@ describeWithFixture(
 
             expect(action.type).eq("exchange");
 
-            await action.transactionMethods.transact();
+            const results = await action.transactionMethods.transact();
+            console.log(results);
 
             const owners = await Promise.all([
               testErc721.ownerOf(nftId),

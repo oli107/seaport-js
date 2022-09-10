@@ -206,6 +206,7 @@ export class Seaport {
       restrictedByZone,
       fees,
       salt = generateRandomSalt(),
+      overrides,
     }: CreateOrderInput,
     accountAddress?: string
   ): Promise<OrderUseCase<CreateOrderAction>> {
@@ -324,7 +325,7 @@ export class Seaport {
     return {
       actions,
       executeAllActions: () =>
-        executeAllActions(actions) as Promise<OrderWithCounter>,
+        executeAllActions(actions, overrides) as Promise<OrderWithCounter>,
     };
   }
 
@@ -619,6 +620,7 @@ export class Seaport {
     accountAddress,
     conduitKey = this.defaultConduitKey,
     recipientAddress = ethers.constants.AddressZero,
+    overrides,
   }: {
     order: OrderWithCounter;
     unitsToFill?: BigNumberish;
@@ -629,6 +631,7 @@ export class Seaport {
     accountAddress?: string;
     conduitKey?: string;
     recipientAddress?: string;
+    overrides?: PayableOverrides;
   }): Promise<
     OrderUseCase<
       ExchangeAction<
@@ -720,6 +723,7 @@ export class Seaport {
         fulfillerOperator,
         signer: fulfiller,
         tips: tipConsiderationItems,
+        overrides,
       });
     }
 
@@ -744,6 +748,7 @@ export class Seaport {
       offererOperator,
       fulfillerOperator,
       recipientAddress,
+      overrides,
     });
   }
 

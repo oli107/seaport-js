@@ -1,4 +1,10 @@
-import { CallOverrides, Contract, Overrides, PayableOverrides } from "ethers";
+import {
+  CallOverrides,
+  Contract,
+  Overrides,
+  PayableOverrides,
+  utils,
+} from "ethers";
 import {
   CreateOrderAction,
   ExchangeAction,
@@ -10,12 +16,13 @@ import {
 export const executeAllActions = async <
   T extends CreateOrderAction | ExchangeAction
 >(
-  actions: OrderUseCase<T>["actions"]
+  actions: OrderUseCase<T>["actions"],
+  overrides?: Overrides
 ) => {
   for (let i = 0; i < actions.length - 1; i++) {
     const action = actions[i];
     if (action.type === "approval") {
-      const tx = await action.transactionMethods.transact();
+      const tx = await action.transactionMethods.transact(overrides);
       await tx.wait();
     }
   }
@@ -24,7 +31,7 @@ export const executeAllActions = async <
 
   return finalAction.type === "create"
     ? await finalAction.createOrder()
-    : await finalAction.transactionMethods.transact();
+    : await finalAction.transactionMethods.transact(overrides);
 };
 
 const instanceOfOverrides = <
